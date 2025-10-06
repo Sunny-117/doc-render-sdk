@@ -223,7 +223,6 @@ export interface ConfigManager {
 // 主题管理器接口
 export interface ThemeManager {
   setTheme: (theme: Theme | string) => void;
-  getTheme: () => Theme;
   applyTheme: () => void;
 }
 
