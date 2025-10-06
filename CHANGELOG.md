@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.7
+
+[compare changes](https://github.com/Sunny-117/doc-render-sdk/compare/v0.0.6...v0.0.7)
+
+### 🩹 Fixes
+
+- Jsx and dep ([93a3d7e](https://github.com/Sunny-117/doc-render-sdk/commit/93a3d7e))
+
+### ❤️ Contributors
+
+- Sunny-117 <zhiqiangfu6@gmail.com>
+
 ## v0.0.6
 
 [compare changes](https://github.com/Sunny-117/doc-render-sdk/compare/v0.0.5...v0.0.6)
