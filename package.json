@@ -1,6 +1,6 @@
 {
   "name": "doc-render-sdk",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A powerful documentation rendering SDK for component libraries",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",

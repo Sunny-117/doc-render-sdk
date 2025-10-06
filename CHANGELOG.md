@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.5
+
+[compare changes](https://github.com/Sunny-117/doc-render-sdk/compare/v0.0.4...v0.0.5)
+
+### 🚀 Enhancements
+
+- Sdk cli based vite ([ad37b10](https://github.com/Sunny-117/doc-render-sdk/commit/ad37b10))
+
+### ❤️ Contributors
+
+- Sunny-117 <zhiqiangfu6@gmail.com>
+
 ## v0.0.4
 
 [compare changes](https://github.com/Sunny-117/doc-render-sdk/compare/v0.0.3...v0.0.4)
