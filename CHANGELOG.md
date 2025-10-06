@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v0.0.8
+
+[compare changes](https://github.com/Sunny-117/doc-render-sdk/compare/v0.0.7...v0.0.8)
+
+### 🏡 Chore
+
+- Readme ([2af03b7](https://github.com/Sunny-117/doc-render-sdk/commit/2af03b7))
+- Fix file name ([9bedd2e](https://github.com/Sunny-117/doc-render-sdk/commit/9bedd2e))
+
+### ❤️ Contributors
+
+- Sunny-117 <zhiqiangfu6@gmail.com>
+
 ## v0.0.7
 
 [compare changes](https://github.com/Sunny-117/doc-render-sdk/compare/v0.0.6...v0.0.7)
