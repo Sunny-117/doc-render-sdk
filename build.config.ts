@@ -7,7 +7,7 @@ export default defineConfig({
       format: 'esm',
       dts: true,
       clean: true,
-      external: ['react', 'react-dom'],
+      noExternal: ['lodash-es'],
       type: 'bundle',
     }
   ],

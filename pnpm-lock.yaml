@@ -17,9 +17,6 @@ importers:
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
-      mini-event:
-        specifier: ^2.3.0
-        version: 2.3.0
     devDependencies:
       '@types/lodash-es':
         specifier: ^4.14.195
@@ -46,8 +43,8 @@ importers:
         specifier: ^18.2.0
         version: 18.3.1(react@18.3.1)
       robuild:
-        specifier: ^0.0.9
-        version: 0.0.9
+        specifier: ^0.0.10
+        version: 0.0.10
       turbo:
         specifier: ^2.5.6
         version: 2.5.8
@@ -1685,9 +1682,6 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
 
-  mini-event@2.3.0:
-    resolution: {integrity: sha512-7VBFiQJ/8O45mBSuY8bYnK+3H4hBbslo9kRZdbmR/n1ARt7exZWnZqTcQoSOo5zwtoOKZsGnl3/+nm1+D0hBFg==}
-
   minimatch@10.0.3:
     resolution: {integrity: sha512-IPZ167aShDZZUMdRk66cyQAW3qr0WzbHkPdMYa8bzZhlHhO3jALbKdxcaak7W9FfT2rZNpQuUu4Od7ILEpXSaw==}
     engines: {node: 20 || >=22}
@@ -1892,8 +1886,8 @@ packages:
   resolve-pkg-maps@1.0.0:
     resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
 
-  robuild@0.0.9:
-    resolution: {integrity: sha512-dkSBFsOip66mQVU+tPpMzQz6cPFkvzCEoETWo+Z1tqIts9ekUNXPXjEr45PgC+pvs4YEAI73ligBvfViSXUppw==}
+  robuild@0.0.10:
+    resolution: {integrity: sha512-NhR+JA/092nkXJc120f7zO2NCVeqcRWjQ/1Yb6FTxonOhxehfaVWRVv7IiS1vIqxYIik+y/2KCpsxJodS+pTgw==}
     hasBin: true
 
   rolldown-plugin-dts@0.16.11:
@@ -3684,8 +3678,6 @@ snapshots:
 
   mime@1.6.0: {}
 
-  mini-event@2.3.0: {}
-
   minimatch@10.0.3:
     dependencies:
       '@isaacs/brace-expansion': 5.0.0
@@ -3927,7 +3919,7 @@ snapshots:
 
   resolve-pkg-maps@1.0.0: {}
 
-  robuild@0.0.9:
+  robuild@0.0.10:
     dependencies:
       c12: 3.3.0
       cac: 6.7.14

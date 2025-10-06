@@ -1,15 +1,7 @@
-import React from 'react';
 import DocSDK from 'doc-render-sdk';
 
 // 从原有doc目录迁移的组件
 import featDemo from './components/feat/demo/index.jsx';
-
-// 模拟原有的工具函数
-const getSpecialColumnsRender = (field) => {
-  return field && typeof field.map === 'function' 
-    ? field.map(f => `<div style="line-height: 19px">${f}</div>`).join('')
-    : field;
-};
 
 // 注册全局组件和代码
 window.__DOC_SDK_DEMOS__ = {

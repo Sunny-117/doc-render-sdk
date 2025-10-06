@@ -5,13 +5,12 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import EventTarget from 'mini-event/EventTarget';
 import Layout from '../components/Layout';
 import RouterManager from './RouterManager';
 import ComponentRegistry from './ComponentRegistry';
 import type { RendererOptions } from '../types';
 
-export default class DocRenderer extends EventTarget {
+export default class DocRenderer {
   private configManager: any;
   private themeManager: any;
   private pluginManager: any;
@@ -21,7 +20,6 @@ export default class DocRenderer extends EventTarget {
   private isRendered: boolean;
 
   constructor({ configManager, themeManager, pluginManager }: RendererOptions) {
-    super();
 
     this.configManager = configManager;
     this.themeManager = themeManager;
