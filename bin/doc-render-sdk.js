@@ -285,7 +285,8 @@ function startDevServer(configPath, options) {
         server: {
           port: Number(options.port) || 8080,
           host: options.host || 'localhost'
-        }
+        },
+        plugins: createVitePlugins()
       });
 
       await server.listen();
