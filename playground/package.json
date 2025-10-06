@@ -1,0 +1,27 @@
+{
+  "name": "sdk-docs",
+  "version": "1.0.0",
+  "description": "SDK 文档站点 - 使用 Doc SDK 构建",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --force",
+    "build": "vite build",
+    "sdk:dev": "npm --prefix .. run sdk:dev",
+    "playground:dev": "pnpm dev"
+  },
+  "keywords": [
+    "documentation",
+    "sdk"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "antd": "6.0.0-alpha.3",
+    "doc-render-sdk": "workspace:*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "5.0.4",
+    "vite": "7.1.8"
+  }
+}
