@@ -8,7 +8,7 @@ const { program } = require('commander');
 const path = require('path');
 const fs = require('fs');
 const { spawn } = require('child_process');
-
+const sdkVersion = require('../package.json').version;
 program
   .name('doc-render-sdk')
   .description('Doc SDK CLI - 文档站点构建工具')
@@ -111,7 +111,7 @@ async function createProject(projectDir, template) {
       preview: 'doc-render-sdk preview'
     },
     dependencies: {
-      'doc-render-sdk': '^1.0.0'
+      'doc-render-sdk': sdkVersion
     },
     devDependencies: {
       webpack: '^5.88.0',
