@@ -3,7 +3,6 @@
 /**
  * Doc SDK CLI 工具
  */
-
 const { program } = require('commander');
 const path = require('path');
 const fs = require('fs');
@@ -49,7 +48,7 @@ program
   .description('启动开发服务器')
   .option('-p, --port <port>', '端口号', '8080')
   .option('-h, --host <host>', '主机地址', 'localhost')
-  .action((options) => {
+  .action(async (options) => {
     console.log('🚀 启动开发服务器...');
     
     const configPath = findConfig();
@@ -58,7 +57,7 @@ program
       process.exit(1);
     }
 
-    startDevServer(configPath, options);
+    await startDevServer(configPath, options);
   });
 
 // 构建项目
@@ -66,7 +65,7 @@ program
   .command('build')
   .description('构建文档站点')
   .option('-o, --output <dir>', '输出目录', 'dist')
-  .action((options) => {
+  .action(async (options) => {
     console.log('📦 构建文档站点...');
     
     const configPath = findConfig();
@@ -75,7 +74,7 @@ program
       process.exit(1);
     }
 
-    buildProject(configPath, options);
+    await buildProject(configPath, options);
   });
 
 
@@ -105,19 +104,18 @@ async function createProject(projectDir, template) {
     version: '1.0.0',
     description: 'Documentation site built with Doc SDK',
     main: 'index.js',
-    scripts: {
-      dev: 'doc-render-sdk dev',
-      build: 'doc-render-sdk build',
-      preview: 'doc-render-sdk preview'
-    },
-    dependencies: {
-      'doc-render-sdk': sdkVersion
-    },
-    devDependencies: {
-      webpack: '^5.88.0',
-      'webpack-cli': '^5.1.0',
-      'webpack-dev-server': '^4.15.0'
-    }
+      scripts: {
+        dev: 'doc-render-sdk dev',
+        build: 'doc-render-sdk build',
+        preview: 'doc-render-sdk preview'
+      },
+      dependencies: {
+        'doc-render-sdk': sdkVersion
+      },
+      devDependencies: {
+        vite: '^5.0.0',
+        '@vitejs/plugin-react': '^3.1.0'
+      }
   };
 
   fs.writeFileSync(
@@ -223,6 +221,7 @@ docSdk.render('#app');
 </head>
 <body>
   <div id="app"></div>
+  <script src="index.js"></script>
 </body>
 </html>`;
 
@@ -278,71 +277,117 @@ function findConfig() {
  * 启动开发服务器
  */
 function startDevServer(configPath, options) {
-  const webpackConfig = generateWebpackConfig(configPath, 'development', options);
-  const configFile = path.join(__dirname, '../webpack.temp.js');
-  
-  fs.writeFileSync(configFile, `module.exports = ${JSON.stringify(webpackConfig, null, 2)};`);
-  
-  const child = spawn('npx', ['webpack', 'serve', '--config', configFile], {
-    stdio: 'inherit',
-    shell: true
-  });
+  // Use Vite Node API to create a dev server via createViteServer
+  (async () => {
+    try {
+      const server = await createViteServer({
+        root: process.cwd(),
+        server: {
+          port: Number(options.port) || 8080,
+          host: options.host || 'localhost'
+        }
+      });
 
-  child.on('close', (code) => {
-    fs.unlinkSync(configFile);
-    process.exit(code);
-  });
+      await server.listen();
+      server.printUrls();
+    } catch (err) {
+      console.error('❌ 启动 Vite 开发服务器失败:', err);
+      process.exit(1);
+    }
+  })();
 }
 
 /**
  * 构建项目
  */
 function buildProject(configPath, options) {
-  const webpackConfig = generateWebpackConfig(configPath, 'production', options);
-  const configFile = path.join(__dirname, '../webpack.temp.js');
-  
-  fs.writeFileSync(configFile, `module.exports = ${JSON.stringify(webpackConfig, null, 2)};`);
-  
-  const child = spawn('npx', ['webpack', '--config', configFile], {
-    stdio: 'inherit',
-    shell: true
-  });
+  // Use Vite build API with plugin-react
+  (async () => {
+    try {
+      const { build } = require('vite');
+      const outDir = options.output || 'dist';
 
-  child.on('close', (code) => {
-    fs.unlinkSync(configFile);
-    if (code === 0) {
+      console.log('📦 running vite build...');
+
+      await build({
+        root: process.cwd(),
+        build: {
+          outDir
+        },
+        plugins: createVitePlugins()
+      });
+
       console.log('✅ 构建完成!');
+    } catch (err) {
+      console.error('❌ Vite 构建失败:', err);
+      process.exit(1);
     }
-    process.exit(code);
-  });
+  })();
+}
+
+/**
+ * Create Vite server with shared plugins
+ */
+function createViteServer(options = {}) {
+  const { createServer } = require('vite');
+  const plugins = createVitePlugins();
+  return createServer({ ...options, plugins });
+}
+
+function createVitePlugins() {
+  try {
+    const reactPlugin = require('@vitejs/plugin-react');
+    return [reactPlugin()];
+  } catch (err) {
+    // If plugin not installed, return empty array and let Vite warn later
+    return [];
+  }
 }
 
 /**
  * 预览构建结果
  */
 function previewBuild(options) {
-  const express = require('express');
-  const app = express();
-  
-  app.use(express.static(options.dir));
-  
-  app.listen(options.port, () => {
-    console.log(`📖 预览地址: http://localhost:${options.port}`);
-  });
-}
+  // Use Vite programmatic preview API if available, else fallback to npx vite preview
+  const distDir = options.dir || 'dist';
+  const port = Number(options.port) || 3000;
 
-/**
- * 生成webpack配置
- */
-function generateWebpackConfig(configPath, mode, options) {
-  // 这里应该生成完整的webpack配置
-  // 简化版本，实际使用时需要完善
-  return {
-    mode,
-    entry: './index.js',
-    output: {
-      path: path.resolve(options.output || 'dist'),
-      filename: 'bundle.js'
+  try {
+    const vite = require('vite');
+    if (typeof vite.preview === 'function') {
+      // Vite exposes preview function in some versions
+      (async () => {
+        try {
+          const server = await vite.preview({ root: process.cwd(), preview: { port } });
+          console.log(`📖 预览地址: http://localhost:${port}`);
+        } catch (err) {
+          console.error('❌ 启动 Vite preview 失败:', err);
+          process.exit(1);
+        }
+      })();
+      return;
     }
-  };
+
+    // Fallback: try to create a server configured for preview
+    if (typeof vite.createServer === 'function') {
+      (async () => {
+        try {
+          const server = await vite.createServer({ root: process.cwd(), preview: { port } });
+          await server.listen();
+          console.log(`📖 预览地址: http://localhost:${port}`);
+        } catch (err) {
+          // continue to fallback
+          console.error('❌ 使用 createServer 作为 preview 启动失败，回退到 CLI:', err.message || err);
+        }
+      })();
+      return;
+    }
+  } catch (err) {
+    // vite not installed locally, will fallback to npx
+  }
+
+  // Final fallback: spawn npx vite preview
+  const args = ['vite', 'preview', '--port', String(port)];
+  const child = spawn('npx', args, { stdio: 'inherit', shell: true, cwd: process.cwd() });
+  child.on('close', (code) => process.exit(code));
 }
