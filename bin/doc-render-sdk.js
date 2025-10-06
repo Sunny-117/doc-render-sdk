@@ -103,14 +103,17 @@ async function createProject(projectDir, template) {
     name: path.basename(projectDir),
     version: '1.0.0',
     description: 'Documentation site built with Doc SDK',
-    main: 'index.js',
+    main: 'index.jsx',
       scripts: {
         dev: 'doc-render-sdk dev',
         build: 'doc-render-sdk build',
-        preview: 'doc-render-sdk preview'
+        // TODO
+        // preview: 'doc-render-sdk preview'
       },
       dependencies: {
-        'doc-render-sdk': sdkVersion
+        'doc-render-sdk': sdkVersion,
+         "react": "^18.2.0",
+         "react-dom": "^18.2.0"
       },
       devDependencies: {
         vite: '^5.0.0',
@@ -221,7 +224,7 @@ docSdk.render('#app');
 </head>
 <body>
   <div id="app"></div>
-  <script src="index.js"></script>
+  <script src="index.jsx"></script>
 </body>
 </html>`;
 
