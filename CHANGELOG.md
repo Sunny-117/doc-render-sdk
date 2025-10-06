@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.6
+
+[compare changes](https://github.com/Sunny-117/doc-render-sdk/compare/v0.0.5...v0.0.6)
+
+### 🩹 Fixes
+
+- CreateVitePlugins ([5e2623a](https://github.com/Sunny-117/doc-render-sdk/commit/5e2623a))
+
+### ❤️ Contributors
+
+- Sunny-117 <zhiqiangfu6@gmail.com>
+
 ## v0.0.5
 
 [compare changes](https://github.com/Sunny-117/doc-render-sdk/compare/v0.0.4...v0.0.5)
