@@ -13,54 +13,29 @@
 - 🎯 **插件系统** - 支持自定义插件扩展功能
 - 📦 **零配置** - 开箱即用，同时支持深度定制
 
-## 快速开始
-
-### 安装
-
-```bash
-npm install doc-render-sdk
-```
-
-### 基本使用
-
-```javascript
-import DocSDK from 'doc-render-sdk';
-
-const docSdk = new DocSDK({
-  title: '我的组件库文档',
-  theme: 'default',
-  components: {
-    'my-component': {
-      label: '我的组件',
-      demos: [
-        {
-          title: '基础用法',
-          desc: '组件的基础使用方式',
-          source: 'basic'
-        }
-      ],
-      apis: [
-        {
-          title: 'MyComponent',
-          apiKey: 'my-component'
-        }
-      ]
-    }
-  }
-});
-
-docSdk.render('#app');
-```
-
 ## 🚀 快速开始
 
-### 安装
+### 1. CLI 工具
+
+```bash
+# 创建新项目
+npx doc-render-sdk create my-docs
+
+# 启动开发服务器
+npx doc-render-sdk dev
+
+# 构建项目
+npx doc-render-sdk build
+
+# 迁移旧项目
+npx doc-render-sdk migrate --source ./doc --target ./docs-new
+```
+
+### 2. 安装
 
 ```bash
 npm install doc-render-sdk
 ```
-
-### 基本使用
 
 ```javascript
 import DocSDK from 'doc-render-sdk';
@@ -90,21 +65,6 @@ const docSdk = new DocSDK({
 docSdk.render('#app');
 ```
 
-### CLI 工具 （待支持）
-
-```bash
-# 创建新项目
-npx doc-render-sdk create my-docs
-
-# 启动开发服务器
-npx doc-render-sdk dev
-
-# 构建项目
-npx doc-render-sdk build
-
-# 迁移旧项目
-npx doc-render-sdk migrate --source ./doc --target ./docs-new
-```
 
 ## 📚 详细文档
 
