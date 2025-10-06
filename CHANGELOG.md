@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.9
+
+[compare changes](https://github.com/Sunny-117/doc-render-sdk/compare/v0.0.8...v0.0.9)
+
+### 🏡 Chore
+
+- Fix type module ([e246b1f](https://github.com/Sunny-117/doc-render-sdk/commit/e246b1f))
+
+### ❤️ Contributors
+
+- Sunny-117 <zhiqiangfu6@gmail.com>
+
 ## v0.0.8
 
 [compare changes](https://github.com/Sunny-117/doc-render-sdk/compare/v0.0.7...v0.0.8)
