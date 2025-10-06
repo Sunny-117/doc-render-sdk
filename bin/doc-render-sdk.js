@@ -224,7 +224,7 @@ docSdk.render('#app');
 </head>
 <body>
   <div id="app"></div>
-  <script src="index.jsx"></script>
+  <script src="index.jsx" type="module"></script>
 </body>
 </html>`;
 
