@@ -210,7 +210,7 @@ const docSdk = new DocSDK(config);
 docSdk.render('#app');
 `;
 
-  fs.writeFileSync(path.join(projectDir, 'index.js'), indexJs);
+  fs.writeFileSync(path.join(projectDir, 'index.jsx'), indexJs);
 
   // 生成HTML文件
   const indexHtml = `<!DOCTYPE html>
