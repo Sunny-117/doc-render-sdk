@@ -18,7 +18,7 @@
     "dev": "turbo run sdk:dev playground:dev --parallel",
     "build": "robuild",
     "prepublish": "pnpm build",
-    "release": "changelogen --release && pnpm publish",
+    "release": "changelogen --release && pnpm publish --no-git-checks",
     "commit": "git-cz",
     "playground:dev": "cd playground && pnpm dev"
   },
