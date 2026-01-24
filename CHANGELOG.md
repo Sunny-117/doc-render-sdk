@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.14
+
+[compare changes](https://github.com/Sunny-117/doc-render-sdk/compare/v0.0.13...v0.0.14)
+
+### 🏡 Chore
+
+- **deploy:** Add deployment script and optimize playground configuration ([f3f2d8c](https://github.com/Sunny-117/doc-render-sdk/commit/f3f2d8c))
+
+### ❤️ Contributors
+
+- Sunny-117 <zhiqiangfu6@gmail.com>
+
 ## v0.0.13
 
 [compare changes](https://github.com/Sunny-117/doc-render-sdk/compare/v0.0.12...v0.0.13)
