@@ -92,476 +92,6 @@ program
 program.parse();
 
 /**
- * 创建组件目录结构
- */
-function createComponentStructure(projectDir) {
-  const components = ['button', 'input', 'card'];
-  
-  components.forEach(comp => {
-    const compDir = path.join(projectDir, 'components', comp, 'demo');
-    fs.mkdirSync(compDir, { recursive: true });
-    
-    // 创建 demo 文件
-    createDemoFiles(projectDir, comp);
-  });
-}
-
-/**
- * 创建 demo 文件
- */
-function createDemoFiles(projectDir, componentName) {
-  const demos = {
-    button: {
-      basic: `import React from 'react';
-import { Button } from 'antd';
-
-export default function BasicButton() {
-  return (
-    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-      <Button>Default</Button>
-      <Button type="primary">Primary</Button>
-      <Button type="dashed">Dashed</Button>
-      <Button type="text">Text</Button>
-      <Button type="link">Link</Button>
-    </div>
-  );
-}`,
-      sizes: `import React from 'react';
-import { Button } from 'antd';
-
-export default function ButtonSizes() {
-  return (
-    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-      <Button size="large">Large</Button>
-      <Button>Default</Button>
-      <Button size="small">Small</Button>
-    </div>
-  );
-}`
-    },
-    input: {
-      basic: `import React from 'react';
-import { Input } from 'antd';
-
-export default function BasicInput() {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '400px' }}>
-      <Input placeholder="Basic usage" />
-      <Input placeholder="Disabled" disabled />
-      <Input.Password placeholder="Password" />
-    </div>
-  );
-}`
-    },
-    card: {
-      basic: `import React from 'react';
-import { Card } from 'antd';
-
-export default function BasicCard() {
-  return (
-    <Card title="Card Title" style={{ width: 300 }}>
-      <p>Card content</p>
-      <p>Card content</p>
-      <p>Card content</p>
-    </Card>
-  );
-}`
-    }
-  };
-
-  const componentDemos = demos[componentName] || {};
-  
-  Object.entries(componentDemos).forEach(([demoName, content]) => {
-    const demoPath = path.join(projectDir, 'components', componentName, 'demo', `${demoName}.jsx`);
-    fs.writeFileSync(demoPath, content);
-  });
-}
-
-/**
- * 创建 Vite 配置
- */
-function createViteConfig(projectDir) {
-  const viteConfig = `import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { resolve } from 'path';
-import { createDemoCodePlugin } from 'doc-render-sdk/plugin';
-
-export default defineConfig({
-  plugins: [
-    react(),
-    createDemoCodePlugin({
-      include: 'index.js',
-      demoPattern: '/demo/',
-      globalVar: 'window.__DOC_SDK_DEMO_CODES__',
-      debug: process.env.NODE_ENV === 'development',
-    })
-  ],
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, 'src')
-    }
-  },
-  server: {
-    port: 3000,
-    open: true
-  }
-});
-`;
-
-  fs.writeFileSync(path.join(projectDir, 'vite.config.js'), viteConfig);
-}
-
-/**
- * 创建入口文件
- */
-function createIndexFile(projectDir) {
-  const indexJs = `import DocSDK from 'doc-render-sdk';
-
-// Button 组件 demos
-import buttonBasic from './components/button/demo/basic.jsx';
-import buttonSizes from './components/button/demo/sizes.jsx';
-
-// Input 组件 demos
-import inputBasic from './components/input/demo/basic.jsx';
-
-// Card 组件 demos
-import cardBasic from './components/card/demo/basic.jsx';
-
-// 注册全局组件
-window.__DOC_SDK_DEMOS__ = {
-  'button': {
-    'basic': buttonBasic,
-    'sizes': buttonSizes,
-  },
-  'input': {
-    'basic': inputBasic,
-  },
-  'card': {
-    'basic': cardBasic,
-  },
-};
-
-// Demo 源码将由 vite-plugin-demo-code 自动注入
-
-// 注册 API 文档
-window.__DOC_SDK_APIS__ = {
-  'button': {
-    'Button': [
-      {
-        param: 'type',
-        type: 'string',
-        desc: '按钮类型',
-        option: 'default | primary | dashed | text | link',
-        default: 'default',
-        required: false
-      },
-      {
-        param: 'size',
-        type: 'string',
-        desc: '按钮尺寸',
-        option: 'small | middle | large',
-        default: 'middle',
-        required: false
-      },
-      {
-        param: 'disabled',
-        type: 'boolean',
-        desc: '是否禁用',
-        option: 'true | false',
-        default: 'false',
-        required: false
-      },
-      {
-        param: 'onClick',
-        type: 'function',
-        desc: '点击事件回调',
-        option: '(event) => void',
-        default: '-',
-        required: false
-      },
-    ]
-  },
-  'input': {
-    'Input': [
-      {
-        param: 'value',
-        type: 'string',
-        desc: '输入框的值',
-        option: '-',
-        default: '-',
-        required: false
-      },
-      {
-        param: 'placeholder',
-        type: 'string',
-        desc: '占位文本',
-        option: '-',
-        default: '-',
-        required: false
-      },
-      {
-        param: 'disabled',
-        type: 'boolean',
-        desc: '是否禁用',
-        option: 'true | false',
-        default: 'false',
-        required: false
-      },
-      {
-        param: 'onChange',
-        type: 'function',
-        desc: '值变化时的回调',
-        option: '(e) => void',
-        default: '-',
-        required: false
-      },
-    ]
-  },
-  'card': {
-    'Card': [
-      {
-        param: 'title',
-        type: 'string | ReactNode',
-        desc: '卡片标题',
-        option: '-',
-        default: '-',
-        required: false
-      },
-      {
-        param: 'bordered',
-        type: 'boolean',
-        desc: '是否有边框',
-        option: 'true | false',
-        default: 'true',
-        required: false
-      },
-      {
-        param: 'children',
-        type: 'ReactNode',
-        desc: '卡片内容',
-        option: '-',
-        default: '-',
-        required: false
-      },
-    ]
-  },
-};
-
-// 创建文档SDK实例
-const docSdk = new DocSDK({
-  title: 'My Component Library',
-  description: '基于 Doc SDK 构建的组件文档',
-  version: '1.0.0',
-  
-  theme: {
-    name: 'default',
-    colors: {
-      primary: '#1890ff'
-    }
-  },
-  
-  layout: {
-    type: 'sidebar',
-    sidebar: {
-      width: 280,
-      collapsible: true
-    }
-  },
-  
-  components: {
-    'button': {
-      label: 'Button 按钮',
-      description: '按钮用于触发一个操作',
-      group: '基础组件',
-      demos: [
-        {
-          title: '按钮类型',
-          desc: '按钮有五种类型：默认按钮、主要按钮、虚线按钮、文本按钮和链接按钮',
-          source: 'basic'
-        },
-        {
-          title: '按钮尺寸',
-          desc: '按钮有三种尺寸：大、中、小',
-          source: 'sizes'
-        }
-      ],
-      apis: [
-        {
-          title: 'Button Props',
-          apiKey: 'Button'
-        }
-      ]
-    },
-    'input': {
-      label: 'Input 输入框',
-      description: '通过鼠标或键盘输入内容',
-      group: '表单组件',
-      demos: [
-        {
-          title: '基础用法',
-          desc: '基础的输入框用法',
-          source: 'basic'
-        }
-      ],
-      apis: [
-        {
-          title: 'Input Props',
-          apiKey: 'Input'
-        }
-      ]
-    },
-    'card': {
-      label: 'Card 卡片',
-      description: '通用卡片容器',
-      group: '数据展示',
-      demos: [
-        {
-          title: '基础卡片',
-          desc: '包含标题、内容的基础卡片',
-          source: 'basic'
-        }
-      ],
-      apis: [
-        {
-          title: 'Card Props',
-          apiKey: 'Card'
-        }
-      ]
-    },
-  },
-  
-  installation: \`# 使用 npm
-npm install my-component-library
-
-# 使用 yarn
-yarn add my-component-library
-
-# 使用 pnpm
-pnpm add my-component-library\`,
-  
-  usage: \`import { Button } from 'my-component-library';
-
-function App() {
-  return <Button type="primary">Click me</Button>;
-}\`,
-  
-  features: [
-    {
-      icon: '🎨',
-      title: '主题定制',
-      description: '支持自定义主题颜色、字体、间距等'
-    },
-    {
-      icon: '📱',
-      title: '响应式设计',
-      description: '完美适配桌面端和移动端'
-    },
-    {
-      icon: '⚡',
-      title: '高性能',
-      description: '采用 React 18 和虚拟滚动技术'
-    },
-    {
-      icon: '🔍',
-      title: '智能搜索',
-      description: '内置全文搜索功能'
-    }
-  ],
-  
-  footerLinks: [
-    {
-      text: 'GitHub',
-      url: 'https://github.com/yourusername/your-repo',
-      external: true
-    }
-  ]
-});
-
-// 渲染文档
-docSdk.render('#app');
-`;
-
-  fs.writeFileSync(path.join(projectDir, 'index.js'), indexJs);
-}
-
-/**
- * 创建 HTML 文件
- */
-function createIndexHtml(projectDir) {
-  const indexHtml = `<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Component Library</title>
-</head>
-<body>
-  <div id="app"></div>
-  <script src="index.js" type="module"></script>
-</body>
-</html>`;
-
-  fs.writeFileSync(path.join(projectDir, 'index.html'), indexHtml);
-}
-
-/**
- * 创建 README
- */
-function createReadme(projectDir) {
-  const readme = `# ${path.basename(projectDir)}
-
-基于 Doc SDK 构建的组件文档站点。
-
-## 快速开始
-
-\`\`\`bash
-# 安装依赖
-npm install
-
-# 启动开发服务器
-npm run dev
-
-# 构建生产版本
-npm run build
-
-# 预览构建结果
-npm run preview
-\`\`\`
-
-## 项目结构
-
-\`\`\`
-${path.basename(projectDir)}/
-├── components/          # 组件目录
-│   ├── button/
-│   │   └── demo/       # Button 组件示例
-│   ├── input/
-│   │   └── demo/       # Input 组件示例
-│   └── card/
-│       └── demo/       # Card 组件示例
-├── index.html          # HTML 入口
-├── index.js            # JS 入口
-├── vite.config.js      # Vite 配置
-└── package.json
-\`\`\`
-
-## 添加新组件
-
-1. 在 \`components/\` 目录下创建组件文件夹
-2. 在 \`components/your-component/demo/\` 下创建示例文件
-3. 在 \`index.js\` 中注册组件和 API 文档
-
-## 文档
-
-- [Doc SDK 文档](https://github.com/Sunny-117/doc-render-sdk)
-- [Vite 文档](https://vitejs.dev/)
-- [React 文档](https://react.dev/)
-`;
-
-  fs.writeFileSync(path.join(projectDir, 'README.md'), readme);
-}
-
-/**
  * 创建新项目
  */
 async function createProject(projectDir, template) {
@@ -573,23 +103,22 @@ async function createProject(projectDir, template) {
     name: path.basename(projectDir),
     version: '1.0.0',
     description: 'Documentation site built with Doc SDK',
-    type: 'module',
-    main: 'index.js',
-    scripts: {
-      dev: 'doc-render-sdk dev',
-      build: 'doc-render-sdk build',
-      preview: 'doc-render-sdk preview'
-    },
-    dependencies: {
-      'doc-render-sdk': `^${sdkVersion}`,
-      'react': '^18.2.0',
-      'react-dom': '^18.2.0',
-      'antd': '6.0.0-alpha.3'
-    },
-    devDependencies: {
-      'vite': '7.1.8',
-      '@vitejs/plugin-react': '5.0.4'
-    }
+    main: 'index.jsx',
+      scripts: {
+        dev: 'doc-render-sdk dev',
+        build: 'doc-render-sdk build',
+        // TODO
+        // preview: 'doc-render-sdk preview'
+      },
+      dependencies: {
+        'doc-render-sdk': sdkVersion,
+         "react": "^18.2.0",
+         "react-dom": "^18.2.0"
+      },
+      devDependencies: {
+        vite: '^5.0.0',
+        '@vitejs/plugin-react': '^3.1.0'
+      }
   };
 
   fs.writeFileSync(
@@ -597,20 +126,134 @@ async function createProject(projectDir, template) {
     JSON.stringify(packageJson, null, 2)
   );
 
-  // 创建组件目录结构
-  createComponentStructure(projectDir);
+  // 生成配置文件
+  const config = {
+    title: 'My Documentation',
+    description: 'Component documentation built with Doc SDK',
+    version: '1.0.0',
+    components: {
+      'example': {
+        label: 'Example Component',
+        description: 'An example component to get you started',
+        demos: [
+          {
+            title: 'Basic Usage',
+            desc: 'Basic usage of the component',
+            source: 'basic'
+          }
+        ],
+        apis: [
+          {
+            title: 'Example',
+            apiKey: 'Example'
+          }
+        ]
+      }
+    }
+  };
 
-  // 生成 vite.config.js
-  createViteConfig(projectDir);
+  fs.writeFileSync(
+    path.join(projectDir, 'doc.config.js'),
+    `export default ${JSON.stringify(config, null, 2)};`
+  );
 
   // 生成入口文件
-  createIndexFile(projectDir);
+  const indexJs = `import DocSDK from 'doc-render-sdk';
+import config from './doc.config.js';
+
+// 注册示例组件
+const ExampleComponent = () => {
+  return (
+    <div style={{ padding: '20px' }}>
+      <h3>Example Component</h3>
+      <p>This is an example component.</p>
+    </div>
+  );
+};
+
+// 注册全局组件
+window.__DOC_SDK_DEMOS__ = {
+  'example': {
+    'basic': ExampleComponent
+  }
+};
+
+window.__DOC_SDK_DEMO_CODES__ = {
+  'example': {
+    'basic': \`const ExampleComponent = () => {
+  return (
+    <div style={{ padding: '20px' }}>
+      <h3>Example Component</h3>
+      <p>This is an example component.</p>
+    </div>
+  );
+};\`
+  }
+};
+
+window.__DOC_SDK_APIS__ = {
+  'example': {
+    'Example': [
+      {
+        param: 'children',
+        type: 'ReactNode',
+        desc: 'The content of the component',
+        option: '',
+        default: '',
+        required: false
+      }
+    ]
+  }
+};
+
+const docSdk = new DocSDK(config);
+docSdk.render('#app');
+`;
+
+  fs.writeFileSync(path.join(projectDir, 'index.jsx'), indexJs);
 
   // 生成HTML文件
-  createIndexHtml(projectDir);
+  const indexHtml = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Documentation</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="index.jsx" type="module"></script>
+</body>
+</html>`;
+
+  fs.writeFileSync(path.join(projectDir, 'index.html'), indexHtml);
 
   // 生成README
-  createReadme(projectDir);
+  const readme = `# ${path.basename(projectDir)}
+
+Documentation site built with Doc SDK.
+
+## Getting Started
+
+\`\`\`bash
+npm install
+npm run dev
+\`\`\`
+
+## Commands
+
+- \`npm run dev\` - Start development server
+- \`npm run build\` - Build for production
+- \`npm run preview\` - Preview build
+
+## Documentation
+
+- [Doc SDK Documentation](https://github.com/Sunny-117/doc-render-sdk)
+`;
+
+  fs.writeFileSync(path.join(projectDir, 'README.md'), readme);
 }
 
 /**
@@ -636,94 +279,54 @@ function findConfig() {
 /**
  * 启动开发服务器
  */
-async function startDevServer(configPath, options) {
-  try {
-    const { createServer } = require('vite');
-    const react = require('@vitejs/plugin-react');
-    
-    // 尝试加载 doc-render-sdk 插件
-    let demoPlugin = null;
+function startDevServer(configPath, options) {
+  // Use Vite Node API to create a dev server via createViteServer
+  (async () => {
     try {
-      const { createDemoCodePlugin } = require('doc-render-sdk/plugin');
-      demoPlugin = createDemoCodePlugin({
-        include: 'index.js',
-        demoPattern: '/demo/',
-        globalVar: 'window.__DOC_SDK_DEMO_CODES__',
-        debug: true,
+      const server = await createViteServer({
+        root: process.cwd(),
+        server: {
+          port: Number(options.port) || 8080,
+          host: options.host || 'localhost'
+        },
+        plugins: createVitePlugins()
       });
+
+      await server.listen();
+      server.printUrls();
     } catch (err) {
-      console.warn('⚠️  未找到 doc-render-sdk 插件，将跳过 demo 代码注入功能');
+      console.error('❌ 启动 Vite 开发服务器失败:', err);
+      process.exit(1);
     }
-
-    const plugins = [react()];
-    if (demoPlugin) {
-      plugins.push(demoPlugin);
-    }
-
-    const server = await createServer({
-      root: process.cwd(),
-      server: {
-        port: Number(options.port) || 3000,
-        host: options.host || 'localhost',
-        open: true
-      },
-      plugins
-    });
-
-    await server.listen();
-    server.printUrls();
-    
-    console.log('\n✨ 开发服务器已启动！');
-  } catch (err) {
-    console.error('❌ 启动开发服务器失败:', err);
-    process.exit(1);
-  }
+  })();
 }
 
 /**
  * 构建项目
  */
-async function buildProject(configPath, options) {
-  try {
-    const { build } = require('vite');
-    const react = require('@vitejs/plugin-react');
-    const outDir = options.output || 'dist';
-
-    // 尝试加载 doc-render-sdk 插件
-    let demoPlugin = null;
+function buildProject(configPath, options) {
+  // Use Vite build API with plugin-react
+  (async () => {
     try {
-      const { createDemoCodePlugin } = require('doc-render-sdk/plugin');
-      demoPlugin = createDemoCodePlugin({
-        include: 'index.js',
-        demoPattern: '/demo/',
-        globalVar: 'window.__DOC_SDK_DEMO_CODES__',
-        debug: false,
+      const { build } = require('vite');
+      const outDir = options.output || 'dist';
+
+      console.log('📦 running vite build...');
+
+      await build({
+        root: process.cwd(),
+        build: {
+          outDir
+        },
+        plugins: createVitePlugins()
       });
+
+      console.log('✅ 构建完成!');
     } catch (err) {
-      console.warn('⚠️  未找到 doc-render-sdk 插件，将跳过 demo 代码注入功能');
+      console.error('❌ Vite 构建失败:', err);
+      process.exit(1);
     }
-
-    const plugins = [react()];
-    if (demoPlugin) {
-      plugins.push(demoPlugin);
-    }
-
-    console.log('📦 开始构建...');
-
-    await build({
-      root: process.cwd(),
-      build: {
-        outDir
-      },
-      plugins
-    });
-
-    console.log('✅ 构建完成!');
-    console.log(`📁 输出目录: ${outDir}`);
-  } catch (err) {
-    console.error('❌ 构建失败:', err);
-    process.exit(1);
-  }
+  })();
 }
 
 /**
@@ -748,25 +351,47 @@ function createVitePlugins() {
 /**
  * 预览构建结果
  */
-async function previewBuild(options) {
+function previewBuild(options) {
+  // Use Vite programmatic preview API if available, else fallback to npx vite preview
+  const distDir = options.dir || 'dist';
+  const port = Number(options.port) || 3000;
+
   try {
-    const { preview } = require('vite');
-    const port = Number(options.port) || 3000;
+    const vite = require('vite');
+    if (typeof vite.preview === 'function') {
+      // Vite exposes preview function in some versions
+      (async () => {
+        try {
+          const server = await vite.preview({ root: process.cwd(), preview: { port } });
+          console.log(`📖 预览地址: http://localhost:${port}`);
+        } catch (err) {
+          console.error('❌ 启动 Vite preview 失败:', err);
+          process.exit(1);
+        }
+      })();
+      return;
+    }
 
-    console.log('👀 启动预览服务器...');
-
-    const server = await preview({
-      root: process.cwd(),
-      preview: {
-        port,
-        open: true
-      }
-    });
-
-    server.printUrls();
-    console.log('\n✨ 预览服务器已启动！');
+    // Fallback: try to create a server configured for preview
+    if (typeof vite.createServer === 'function') {
+      (async () => {
+        try {
+          const server = await vite.createServer({ root: process.cwd(), preview: { port } });
+          await server.listen();
+          console.log(`📖 预览地址: http://localhost:${port}`);
+        } catch (err) {
+          // continue to fallback
+          console.error('❌ 使用 createServer 作为 preview 启动失败，回退到 CLI:', err.message || err);
+        }
+      })();
+      return;
+    }
   } catch (err) {
-    console.error('❌ 启动预览服务器失败:', err);
-    process.exit(1);
+    // vite not installed locally, will fallback to npx
   }
+
+  // Final fallback: spawn npx vite preview
+  const args = ['vite', 'preview', '--port', String(port)];
+  const child = spawn('npx', args, { stdio: 'inherit', shell: true, cwd: process.cwd() });
+  child.on('close', (code) => process.exit(code));
 }
