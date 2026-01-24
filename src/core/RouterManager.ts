@@ -151,17 +151,10 @@ export default class RouterManager {
     // 更新当前路由
     this.currentRoute = newRoute;
 
-    // 更新URL
+    // 更新URL（只使用 hash，不使用 pushState）
     if (pushState) {
       const hash = this.buildHash(path, params);
       window.location.hash = hash;
-      
-      // 推入历史记录
-      window.history.pushState(
-        { path, params },
-        newRoute.title,
-        window.location.pathname + window.location.search + hash
-      );
     }
 
     // 通知路由变化

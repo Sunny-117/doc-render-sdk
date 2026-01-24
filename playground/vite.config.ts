@@ -4,6 +4,11 @@ import { resolve } from 'path';
 import { createDemoCodePlugin } from 'doc-render-sdk/plugin';
 
 export default defineConfig({
+  // GitHub Pages 部署时需要设置 base 路径
+  // 如果部署到 https://username.github.io/repo-name/，设置为 '/repo-name/'
+  // 如果部署到根路径，设置为 '/'
+  base: process.env.NODE_ENV === 'production' ? '/doc-render-sdk/' : '/',
+  
   plugins: [
     react(),
     // Demo 代码自动生成插件
@@ -26,8 +31,13 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
-      'doc-render-sdk': resolve(__dirname, '../dist/index.mjs')
-    }
+      'doc-render-sdk': resolve(__dirname, '../dist/index.mjs'),
+      // 确保 React 只有一个实例
+      'react': resolve(__dirname, 'node_modules/react'),
+      'react-dom': resolve(__dirname, 'node_modules/react-dom'),
+      'react/jsx-runtime': resolve(__dirname, 'node_modules/react/jsx-runtime')
+    },
+    dedupe: ['react', 'react-dom']
   },
   server: {
     port: 3000,
