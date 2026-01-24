@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import Layout from '../components/Layout';
 import RouterManager from './RouterManager';
 import ComponentRegistry from './ComponentRegistry';
@@ -18,6 +18,7 @@ export default class DocRenderer {
   private componentRegistry: any;
   private targetElement: HTMLElement | null;
   private isRendered: boolean;
+  private root: any;
 
   constructor({ configManager, themeManager, pluginManager }: RendererOptions) {
 
@@ -30,6 +31,7 @@ export default class DocRenderer {
 
     this.targetElement = null;
     this.isRendered = false;
+    this.root = null;
 
     // 初始化插件
     this.pluginManager.initialize(this);
@@ -89,9 +91,12 @@ export default class DocRenderer {
       onRouteChange: this.handleRouteChange.bind(this)
     };
 
-    ReactDOM.render(
-      React.createElement(Layout, layoutProps),
-      this.targetElement
+    if (!this.root) {
+      this.root = createRoot(this.targetElement!);
+    }
+    
+    this.root.render(
+      React.createElement(Layout, layoutProps)
     );
   }
 
@@ -136,7 +141,10 @@ export default class DocRenderer {
    */
   destroy() {
     if (this.targetElement && this.isRendered) {
-      ReactDOM.unmountComponentAtNode(this.targetElement);
+      if (this.root) {
+        this.root.unmount();
+        this.root = null;
+      }
       this.routerManager.destroy();
       this.componentRegistry.clear();
       // this.destroyEvents();

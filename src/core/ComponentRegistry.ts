@@ -75,21 +75,19 @@ export default class ComponentRegistry {
    * @returns {React.Component} demo组件
    */
   async loadDemo(componentId, demo) {
-    // 这里可以根据不同的加载策略来实现
-    // 例如：动态import、require.context等
     try {
-      // 尝试动态导入
-      const demoPath = `../components/${componentId}/demo/${demo.source}`;
-      console.log({demoPath})
-      const module = await import(/* @vite-ignore */ demoPath);
-      return module.default || module;
-    } catch (error) {
-      // 如果动态导入失败，尝试从全局注册的组件中获取
+      // 优先从全局注册的组件中获取
       const globalDemo = window.__DOC_SDK_DEMOS__?.[componentId]?.[demo.source];
       if (globalDemo) {
         return globalDemo;
       }
       
+      // 如果全局没有注册，尝试动态导入（用于开发环境）
+      const demoPath = `../components/${componentId}/demo/${demo.source}`;
+      console.log({demoPath})
+      const module = await import(/* @vite-ignore */ demoPath);
+      return module.default || module;
+    } catch (error) {
       throw new Error(`Demo component not found: ${componentId}/${demo.source}`);
     }
   }
@@ -149,7 +147,6 @@ export default class ComponentRegistry {
     try {
       // 尝试从全局注册的API数据中获取
       const globalApiData = window.__DOC_SDK_APIS__?.[componentId]?.[api.apiKey];
-      console.log(globalApiData, 'globalApiData')
       if (globalApiData) {
         return globalApiData;
       }
