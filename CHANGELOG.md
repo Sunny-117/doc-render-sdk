@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.13
+
+[compare changes](https://github.com/Sunny-117/doc-render-sdk/compare/v0.0.12...v0.0.13)
+
+### 🏡 Chore
+
+- Reset cli ([78ec7e7](https://github.com/Sunny-117/doc-render-sdk/commit/78ec7e7))
+
+### ❤️ Contributors
+
+- Sunny-117 <zhiqiangfu6@gmail.com>
+
 ## v0.0.12
 
 [compare changes](https://github.com/Sunny-117/doc-render-sdk/compare/v0.0.3...v0.0.12)
