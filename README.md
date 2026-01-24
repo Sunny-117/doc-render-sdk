@@ -66,7 +66,132 @@ docSdk.render('#app');
 ```
 
 
-## 📚 详细文档
+## 🔧 Vite 插件
+
+doc-render-sdk 提供了 Vite 插件，自动读取 demo 文件源码并注入到全局变量。
+
+### 核心特性
+
+- ✅ **自动读取源码** - 从 demo 文件自动读取源代码
+- ✅ **零维护成本** - 无需手动维护代码字符串
+- ✅ **单一数据源** - demo 文件即是唯一的代码来源
+- ✅ **自动同步** - 修改 demo 文件，代码展示自动更新
+- ✅ **灵活配置** - 支持自定义配置和预设
+
+### 快速使用
+
+```javascript
+// vite.config.js
+import { defineConfig } from 'vite';
+import demoCodePlugin from 'doc-render-sdk/plugin';
+
+export default defineConfig({
+  plugins: [
+    demoCodePlugin({
+      include: 'src/main.js',
+      demoPattern: '/demo/',
+      debug: true
+    })
+  ]
+});
+```
+
+### 预设配置
+
+```javascript
+import demoCodePlugin, { presets } from 'doc-render-sdk/plugin';
+
+// 默认配置
+demoCodePlugin(presets.default)
+
+// 严格模式
+demoCodePlugin(presets.strict)
+
+// 宽松模式（支持下划线命名）
+demoCodePlugin(presets.loose)
+
+// TypeScript 项目
+demoCodePlugin(presets.typescript)
+```
+
+详细文档请查看 [插件文档](./src/plugin/README.md)
+
+---
+
+## 📚 Playground 文档
+
+- [项目说明](./playground/README.md) - Playground 项目概览
+- [组件添加指南](./playground/HOW_TO_ADD_COMPONENT.md) - 如何添加新组件
+- [项目总结](./playground/SUMMARY.md) - 完整的项目总结
+
+### 自动化工具
+
+- [Vite 插件文档](./playground/VITE_PLUGIN_README.md) - vite-plugin-demo-code 详细说明
+- [代码自动生成](./playground/DEMO_CODE_AUTO_GENERATION.md) - Demo 代码自动生成原理
+- [重要变更](./playground/CHANGES.md) - 最新变更说明
+
+## 🔧 Vite 插件：vite-plugin-demo-code
+
+专为 doc-render-sdk 设计的 Vite 插件，自动读取 demo 文件源码并注入到全局变量。
+
+### 核心特性
+
+- ✅ **自动读取源码** - 从 demo 文件自动读取源代码
+- ✅ **零维护成本** - 无需手动维护代码字符串
+- ✅ **单一数据源** - demo 文件即是唯一的代码来源
+- ✅ **自动同步** - 修改 demo 文件，代码展示自动更新
+- ✅ **灵活配置** - 支持自定义配置和预设
+
+### 快速使用
+
+```javascript
+// vite.config.js
+import demoCodePlugin from './vite-plugin-demo-code.js';
+
+export default defineConfig({
+  plugins: [
+    demoCodePlugin()  // 使用默认配置
+  ]
+});
+```
+
+### 自定义配置
+
+```javascript
+demoCodePlugin({
+  include: 'src/main.js',           // 处理的文件
+  demoPattern: '/components/',      // Demo 文件路径模式
+  globalVar: 'window.__MY_CODES__', // 自定义全局变量名
+  debug: true,                      // 开启调试模式
+  transform: (code) => {            // 自定义代码转换
+    return code.replace(/\/\/.*/g, '');
+  }
+})
+```
+
+### 预设配置
+
+```javascript
+import demoCodePlugin, { presets } from './vite-plugin-demo-code.js';
+
+// 默认配置
+demoCodePlugin(presets.default)
+
+// 严格模式
+demoCodePlugin(presets.strict)
+
+// 宽松模式（支持下划线命名）
+demoCodePlugin(presets.loose)
+
+// TypeScript 项目
+demoCodePlugin(presets.typescript)
+```
+
+详细文档请查看 [Vite 插件文档](./playground/VITE_PLUGIN_README.md)
+
+---
+
+## 📚 配置文档
 
 ### 配置选项
 

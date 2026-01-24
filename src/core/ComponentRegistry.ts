@@ -81,7 +81,7 @@ export default class ComponentRegistry {
       // 尝试动态导入
       const demoPath = `../components/${componentId}/demo/${demo.source}`;
       console.log({demoPath})
-      const module = await import(demoPath);
+      const module = await import(/* @vite-ignore */ demoPath);
       return module.default || module;
     } catch (error) {
       // 如果动态导入失败，尝试从全局注册的组件中获取
@@ -156,7 +156,7 @@ export default class ComponentRegistry {
 
       // 尝试动态导入
       const apiPath = `../components/${componentId}/api`;
-      const module = await import(apiPath);
+      const module = await import(/* @vite-ignore */ apiPath);
       const apiData = module.default || module;
       
       return apiData[api.apiKey] || [];

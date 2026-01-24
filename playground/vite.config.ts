@@ -26,13 +26,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
-      'doc-render-sdk': resolve(__dirname, '../src/index.ts')
-    }
-  },
-  optimizeDeps: {
-    exclude: ['doc-render-sdk'],
-    esbuildOptions: {
-      preserveSymlinks: true
+      'doc-render-sdk': resolve(__dirname, '../dist/index.mjs')
     }
   },
   server: {

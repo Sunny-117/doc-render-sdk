@@ -19,6 +19,8 @@ export { default as Demo } from './components/Demo';
 export { default as ApiDoc } from './components/ApiDoc';
 export { default as CodeBlock } from './components/CodeBlock';
 
+// 导出插件
+export * from './plugin';
 
 // 导出类型
 export type * from './types';
