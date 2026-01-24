@@ -25,8 +25,7 @@ import chartBar from './components/chart/demo/bar.jsx';
 // Modal 组件 demos
 import modalBasic from './components/modal/demo/basic.jsx';
 
-
-// 注册全局组件和代码
+// 注册全局组件
 window.__DOC_SDK_DEMOS__ = {
   'button': {
     'basic': buttonBasic,
@@ -55,269 +54,10 @@ window.__DOC_SDK_DEMOS__ = {
   },
 };
 
-window.__DOC_SDK_DEMO_CODES__ = {
-  'button': {
-    'basic': `import React from 'react';
+// Demo 源码将由 vite-plugin-demo-code 自动注入
+// 不再需要手动维护 window.__DOC_SDK_DEMO_CODES__
 
-export default function BasicButton() {
-  return (
-    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-      <button>默认按钮</button>
-      <button style={{ backgroundColor: '#1890ff', color: 'white' }}>
-        主要按钮
-      </button>
-      <button style={{ backgroundColor: '#52c41a', color: 'white' }}>
-        成功按钮
-      </button>
-    </div>
-  );
-}`,
-    'sizes': `import React from 'react';
-
-export default function ButtonSizes() {
-  return (
-    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-      <button style={{ padding: '4px 8px', fontSize: '12px' }}>小按钮</button>
-      <button style={{ padding: '8px 16px', fontSize: '14px' }}>中按钮</button>
-      <button style={{ padding: '12px 24px', fontSize: '16px' }}>大按钮</button>
-    </div>
-  );
-}`,
-    'loading': `import React, { useState } from 'react';
-
-export default function LoadingButton() {
-  const [loading, setLoading] = useState(false);
-
-  const handleClick = () => {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 2000);
-  };
-
-  return (
-    <button onClick={handleClick} disabled={loading}>
-      {loading ? '加载中...' : '点击加载'}
-    </button>
-  );
-}`,
-  },
-  'input': {
-    'basic': `import React, { useState } from 'react';
-
-export default function BasicInput() {
-  const [value, setValue] = useState('');
-
-  return (
-    <div>
-      <input
-        placeholder="请输入内容"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
-      <div>输入值: {value}</div>
-    </div>
-  );
-}`,
-    'validation': `import React, { useState } from 'react';
-
-export default function ValidationInput() {
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
-
-  const validateEmail = (value) => {
-    const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
-    if (!emailRegex.test(value)) {
-      setError('请输入有效的邮箱地址');
-    } else {
-      setError('');
-    }
-  };
-
-  return (
-    <div>
-      <input
-        placeholder="请输入邮箱"
-        value={email}
-        onChange={(e) => {
-          setEmail(e.target.value);
-          validateEmail(e.target.value);
-        }}
-      />
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-    </div>
-  );
-}`,
-  },
-  'card': {
-    'basic': `import React from 'react';
-
-export default function BasicCard() {
-  return (
-    <div style={{ padding: '20px', border: '1px solid #e8e8e8', borderRadius: '8px' }}>
-      <h3>基础卡片</h3>
-      <p>这是一个基础的卡片组件</p>
-    </div>
-  );
-}`,
-    'interactive': `import React, { useState } from 'react';
-
-export default function InteractiveCard() {
-  const [liked, setLiked] = useState(false);
-
-  return (
-    <div style={{ padding: '20px', border: '1px solid #e8e8e8' }}>
-      <h3>交互卡片</h3>
-      <button onClick={() => setLiked(!liked)}>
-        {liked ? '❤️ 已喜欢' : '🤍 喜欢'}
-      </button>
-    </div>
-  );
-}`,
-  },
-  'table': {
-    'basic': `import React from 'react';
-
-export default function BasicTable() {
-  const data = [
-    { id: 1, name: '张三', age: 28 },
-    { id: 2, name: '李四', age: 32 },
-  ];
-
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>姓名</th>
-          <th>年龄</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map(row => (
-          <tr key={row.id}>
-            <td>{row.id}</td>
-            <td>{row.name}</td>
-            <td>{row.age}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-}`,
-  },
-  'form': {
-    'complete': `import React, { useState } from 'react';
-
-export default function CompleteForm() {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-  });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('提交数据:', formData);
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        placeholder="用户名"
-        value={formData.username}
-        onChange={(e) => setFormData({...formData, username: e.target.value})}
-      />
-      <input
-        type="email"
-        placeholder="邮箱"
-        value={formData.email}
-        onChange={(e) => setFormData({...formData, email: e.target.value})}
-      />
-      <button type="submit">提交</button>
-    </form>
-  );
-}`,
-  },
-  'chart': {
-    'bar': `import React from 'react';
-
-export default function BarChart() {
-  const data = [
-    { label: '周一', value: 120 },
-    { label: '周二', value: 200 },
-    { label: '周三', value: 150 },
-  ];
-
-  return (
-    <div style={{ display: 'flex', alignItems: 'flex-end', height: '200px' }}>
-      {data.map((item, index) => (
-        <div key={index} style={{ flex: 1, textAlign: 'center' }}>
-          <div style={{
-            height: item.value + 'px',
-            backgroundColor: '#1890ff',
-            margin: '0 10px'
-          }} />
-          <div>{item.label}</div>
-        </div>
-      ))}
-    </div>
-  );
-}`,
-  },
-  'modal': {
-    'basic': `import React, { useState } from 'react';
-
-export default function BasicModal() {
-  const [visible, setVisible] = useState(false);
-
-  return (
-    <>
-      <button onClick={() => setVisible(true)}>打开模态框</button>
-      {visible && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.45)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          <div style={{
-            backgroundColor: 'white',
-            padding: '24px',
-            borderRadius: '8px'
-          }}>
-            <h3>模态框标题</h3>
-            <p>这是模态框内容</p>
-            <button onClick={() => setVisible(false)}>关闭</button>
-          </div>
-        </div>
-      )}
-    </>
-  );
-}`,
-  },
-  'feat': {
-    'normal': `import React, {PureComponent} from 'react';
-
-export default class Normal extends PureComponent {
-    componentDidMount() {
-        // SDK 初始化逻辑
-    }
-
-    render() {
-        return (
-            <div style={{backgroundColor: '#f6f7fa'}}>
-                <div id="report-sdk-normal-demo"></div>
-            </div>
-        );
-    }
-}`
-  }
-};
-
+// 注册 API 文档
 window.__DOC_SDK_APIS__ = {
   'button': {
     'Button': [
@@ -643,26 +383,6 @@ window.__DOC_SDK_APIS__ = {
       },
     ]
   },
-  'feat': {
-    'feat': [
-      {
-        param: 'mode',
-        type: 'string',
-        desc: '渲染模式',
-        option: 'embed | standalone',
-        default: 'embed',
-        required: true
-      },
-      {
-        param: 'token',
-        type: 'string',
-        desc: '访问令牌',
-        option: '',
-        default: '',
-        required: true
-      },
-    ]
-  }
 };
 
 // 创建文档SDK实例
@@ -938,7 +658,6 @@ docSdk.render('#app');`,
       description: '开发模式下支持热模块替换，修改代码后立即看到效果。'
     }
   ],
-  
   
   // 页脚配置
   footerLinks: [
