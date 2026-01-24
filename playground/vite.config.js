@@ -6,12 +6,22 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src')
+      '@': resolve(__dirname, 'src'),
+      'doc-render-sdk': resolve(__dirname, '../src/index.ts')
+    }
+  },
+  optimizeDeps: {
+    exclude: ['doc-render-sdk'],
+    esbuildOptions: {
+      preserveSymlinks: true
     }
   },
   server: {
     port: 3000,
-    open: true
+    open: true,
+    fs: {
+      strict: false
+    }
   },
   build: {
     outDir: 'dist',
