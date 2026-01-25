@@ -1,36 +1,34 @@
 #!/usr/bin/env sh
 
-# abort on errors
+# 终止脚本遇到错误
 set -e
 
-echo "🚀 开始部署 playground..."
+echo "🚀 开始构建 Demo..."
 
-# 1. 构建 SDK
-echo "📦 构建 SDK..."
+# 构建 Demo
+cd playground
+
 npm run build
 
-# 2. 构建 playground
-echo "📦 构建 playground..."
-cd playground
-pnpm build
-cd ..
+echo "✅ 构建完成！"
 
-# 3. 进入 playground 构建输出目录
-cd playground/dist
+# 进入构建输出目录
+cd dist
 
-# 如果部署到自定义域名，取消注释下面这行
-# echo 'www.example.com' > CNAME
+echo "📦 初始化 Git 仓库..."
 
-echo "📝 初始化 Git 仓库..."
-git init
+# 初始化 git 仓库并设置默认分支为 main
+git init -b main
 git add -A
-git commit -m 'deploy playground'
+git commit -m '🚀 Deploy to GitHub Pages'
+
+echo "🌐 部署到 GitHub Pages..."
 
 # 部署到 GitHub Pages
-# 替换为你的仓库地址
-echo "🚢 推送到 GitHub Pages..."
+# 格式: git push -f git@github.com:<USERNAME>/<REPO>.git main:gh-pages
 git push -f https://github.com/Sunny-117/doc-render-sdk.git main:gh-pages
 
-cd -
+echo "✨ 部署成功！"
+echo "🔗 访问地址: https://sunny-117.github.io/doc-render-sdk/"
 
-echo "✅ 部署完成！"
+cd -
