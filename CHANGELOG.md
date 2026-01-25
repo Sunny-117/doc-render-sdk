@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.15
+
+[compare changes](https://github.com/Sunny-117/doc-render-sdk/compare/v0.0.14...v0.0.15)
+
+### 🚀 Enhancements
+
+- **CodeBlock:** Replace with CodeMirror editor implementation ([8c77a57](https://github.com/Sunny-117/doc-render-sdk/commit/8c77a57))
+
+### ❤️ Contributors
+
+- Sunny-117 <zhiqiangfu6@gmail.com>
+
 ## v0.0.14
 
 [compare changes](https://github.com/Sunny-117/doc-render-sdk/compare/v0.0.13...v0.0.14)
