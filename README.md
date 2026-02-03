@@ -1,51 +1,56 @@
-# 文档渲染SDK
+# Documentation Rendering SDK
 
-> ⚠️ **原型项目警告**  
-> 这是一个原型开发项目，用于验证想法和技术方案。代码质量、稳定性和性能未经过充分测试，**不建议在生产环境中使用**。如果你想在生产环境使用类似功能，建议参考本项目的设计思路，重新实现或使用成熟的文档工具（VitePress、Rspress...）。
+## Proof of Concept
+>
+> This is a proof-of-concept project.
+>
+> Features are incomplete, and API and output behavior may change between 0.x versions.
+>
+> Feedback and contributions are very welcome! If you'd like to make changes with more than a few lines of code, please open an issue first to discuss.
 
-一个专门用于渲染组件文档站点的SDK
+A specialized SDK for rendering component documentation sites
 
-## 特性
+## Features
 
-> 💡 以下特性为原型验证功能，部分功能可能不完整或存在问题
+> 💡 The following features are for prototype validation; some may be incomplete or have issues
 
-- 🎨 **主题化设计** - 支持自定义主题和样式
-- 📱 **响应式布局** - 适配各种屏幕尺寸
-- 🔧 **组件化架构** - 高度可复用的文档组件
-- 📖 **Demo展示** - 支持代码预览、实时运行、代码折叠
-- ✏️ **代码编辑** - 支持在线编辑代码并实时预览（实验性功能）
-- 🎯 **语法高亮** - 基于 Prism.js 的代码高亮
-- 📋 **API文档** - 结构化的API参数文档
-- 🚀 **热更新** - 开发时支持热更新
-- 🎯 **插件系统** - 支持自定义插件扩展功能
-- 📦 **零配置** - 开箱即用，同时支持深度定制
+- 🎨 **Themeable Design** - Support for custom themes and styles
+- 📱 **Responsive Layout** - Adapts to various screen sizes
+- 🔧 **Component Architecture** - Highly reusable documentation components
+- � **Demo Showcase** - Support for code preview, live execution, and code folding
+- ✏️ **Code Editing** - Support for online code editing with live preview (experimental feature)
+- � **Syntax Highlighting** - Prism.js-based code highlighting
+- � **API Documentation** - Structured API parameter documentation
+- � **Hot Reload** - Support for hot reload during development
+- 🎯 **Plugin System** - Support for custom plugin extensions
+- � **Zero Config** - Works out of the box, with deep customization support
 
-## ⚠️ 已知限制
+## ⚠️ Known Limitations
 
-- 代码编辑功能依赖 CDN 加载 Monaco Editor 和 Babel，可能存在加载失败的情况
-- 实时编译功能仅支持简单的 JSX 组件，复杂组件可能编译失败
-- 未经过大规模测试，可能存在性能问题和边界情况
-- 部分功能仍在开发中，API 可能随时变更
+- Code editing feature relies on CDN loading of Monaco Editor and Babel, which may fail to load
+- Live compilation only supports simple JSX components; complex components may fail to compile
+- Not tested at scale; may have performance issues and edge cases
+- Some features are still in development; APIs may change at any time
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 1. CLI 工具
+### 1. CLI Tool
 
 ```bash
-# 创建新项目
+# Create new project
 npx doc-render-sdk create my-docs
 
-# 启动开发服务器
+# Start development server
 npx doc-render-sdk dev
 
-# 构建项目
+# Build project
 npx doc-render-sdk build
 
-# 迁移旧项目
+# Migrate old project
 npx doc-render-sdk migrate --source ./doc --target ./docs-new
 ```
 
-### 2. 安装
+### 2. Installation
 
 ```bash
 npm install doc-render-sdk
@@ -55,14 +60,14 @@ npm install doc-render-sdk
 import DocSDK from 'doc-render-sdk';
 
 const docSdk = new DocSDK({
-  title: '我的组件库',
+  title: 'My Component Library',
   components: {
     'button': {
-      label: 'Button 按钮',
+      label: 'Button',
       demos: [
         {
-          title: '基础用法',
-          desc: '最简单的用法',
+          title: 'Basic Usage',
+          desc: 'The simplest usage',
           source: 'basic'
         }
       ],
@@ -79,20 +84,19 @@ const docSdk = new DocSDK({
 docSdk.render('#app');
 ```
 
+## 🔧 Vite Plugin
 
-## 🔧 Vite 插件
+doc-render-sdk provides a Vite plugin that automatically reads demo file source code and injects it into global variables.
 
-doc-render-sdk 提供了 Vite 插件，自动读取 demo 文件源码并注入到全局变量。
+### Core Features
 
-### 核心特性
+- ✅ **Auto Read Source** - Automatically read source code from demo files
+- ✅ **Zero Maintenance** - No need to manually maintain code strings
+- ✅ **Single Source of Truth** - Demo files are the only source of code
+- ✅ **Auto Sync** - Modify demo files, code display updates automatically
+- ✅ **Flexible Config** - Support for custom configuration and presets
 
-- ✅ **自动读取源码** - 从 demo 文件自动读取源代码
-- ✅ **零维护成本** - 无需手动维护代码字符串
-- ✅ **单一数据源** - demo 文件即是唯一的代码来源
-- ✅ **自动同步** - 修改 demo 文件，代码展示自动更新
-- ✅ **灵活配置** - 支持自定义配置和预设
-
-### 快速使用
+### Quick Usage
 
 ```javascript
 // vite.config.js
@@ -110,53 +114,53 @@ export default defineConfig({
 });
 ```
 
-### 预设配置
+### Preset Configurations
 
 ```javascript
 import demoCodePlugin, { presets } from 'doc-render-sdk/plugin';
 
-// 默认配置
+// Default config
 demoCodePlugin(presets.default)
 
-// 严格模式
+// Strict mode
 demoCodePlugin(presets.strict)
 
-// 宽松模式（支持下划线命名）
+// Loose mode (supports underscore naming)
 demoCodePlugin(presets.loose)
 
-// TypeScript 项目
+// TypeScript project
 demoCodePlugin(presets.typescript)
 ```
 
-详细文档请查看 [插件文档](./src/plugin/README.md)
+For detailed documentation, see [Plugin Documentation](./src/plugin/README.md)
 
 ---
 
-## 📚 Playground 文档
+## 📚 Playground Documentation
 
-- [项目说明](./playground/README.md) - Playground 项目概览
-- [组件添加指南](./playground/HOW_TO_ADD_COMPONENT.md) - 如何添加新组件
-- [项目总结](./playground/SUMMARY.md) - 完整的项目总结
+- [Project Overview](./playground/README.md) - Playground project overview
+- [Component Addition Guide](./playground/HOW_TO_ADD_COMPONENT.md) - How to add new components
+- [Project Summary](./playground/SUMMARY.md) - Complete project summary
 
-### 自动化工具
+### Automation Tools
 
-- [Vite 插件文档](./playground/VITE_PLUGIN_README.md) - vite-plugin-demo-code 详细说明
-- [代码自动生成](./playground/DEMO_CODE_AUTO_GENERATION.md) - Demo 代码自动生成原理
-- [重要变更](./playground/CHANGES.md) - 最新变更说明
+- [Vite Plugin Documentation](./playground/VITE_PLUGIN_README.md) - vite-plugin-demo-code detailed documentation
+- [Code Auto Generation](./playground/DEMO_CODE_AUTO_GENERATION.md) - Demo code auto-generation principles
+- [Important Changes](./playground/CHANGES.md) - Latest changes
 
-## 🔧 Vite 插件：vite-plugin-demo-code
+## 🔧 Vite Plugin: vite-plugin-demo-code
 
-专为 doc-render-sdk 设计的 Vite 插件，自动读取 demo 文件源码并注入到全局变量。
+A Vite plugin designed specifically for doc-render-sdk that automatically reads demo file source code and injects it into global variables.
 
-### 核心特性
+### Core Features
 
-- ✅ **自动读取源码** - 从 demo 文件自动读取源代码
-- ✅ **零维护成本** - 无需手动维护代码字符串
-- ✅ **单一数据源** - demo 文件即是唯一的代码来源
-- ✅ **自动同步** - 修改 demo 文件，代码展示自动更新
-- ✅ **灵活配置** - 支持自定义配置和预设
+- ✅ **Auto Read Source** - Automatically read source code from demo files
+- ✅ **Zero Maintenance** - No need to manually maintain code strings
+- ✅ **Single Source of Truth** - Demo files are the only source of code
+- ✅ **Auto Sync** - Modify demo files, code display updates automatically
+- ✅ **Flexible Config** - Support for custom configuration and presets
 
-### 快速使用
+### Quick Usage
 
 ```javascript
 // vite.config.js
@@ -164,59 +168,59 @@ import demoCodePlugin from './vite-plugin-demo-code.js';
 
 export default defineConfig({
   plugins: [
-    demoCodePlugin()  // 使用默认配置
+    demoCodePlugin()  // Use default config
   ]
 });
 ```
 
-### 自定义配置
+### Custom Configuration
 
 ```javascript
 demoCodePlugin({
-  include: 'src/main.js',           // 处理的文件
-  demoPattern: '/components/',      // Demo 文件路径模式
-  globalVar: 'window.__MY_CODES__', // 自定义全局变量名
-  debug: true,                      // 开启调试模式
-  transform: (code) => {            // 自定义代码转换
+  include: 'src/main.js',           // Files to process
+  demoPattern: '/components/',      // Demo file path pattern
+  globalVar: 'window.__MY_CODES__', // Custom global variable name
+  debug: true,                      // Enable debug mode
+  transform: (code) => {            // Custom code transformation
     return code.replace(/\/\/.*/g, '');
   }
 })
 ```
 
-### 预设配置
+### Preset Configurations
 
 ```javascript
 import demoCodePlugin, { presets } from './vite-plugin-demo-code.js';
 
-// 默认配置
+// Default config
 demoCodePlugin(presets.default)
 
-// 严格模式
+// Strict mode
 demoCodePlugin(presets.strict)
 
-// 宽松模式（支持下划线命名）
+// Loose mode (supports underscore naming)
 demoCodePlugin(presets.loose)
 
-// TypeScript 项目
+// TypeScript project
 demoCodePlugin(presets.typescript)
 ```
 
-详细文档请查看 [Vite 插件文档](./playground/VITE_PLUGIN_README.md)
+For detailed documentation, see [Vite Plugin Documentation](./playground/VITE_PLUGIN_README.md)
 
 ---
 
-## 📚 配置文档
+## 📚 Configuration Documentation
 
-### 配置选项
+### Configuration Options
 
 ```javascript
 const config = {
-  // 基本信息
+  // Basic information
   title: 'Documentation',
   description: 'Component Documentation Site',
   version: '1.0.0',
 
-  // 主题配置
+  // Theme configuration
   theme: {
     name: 'default',
     colors: {
@@ -224,7 +228,7 @@ const config = {
     }
   },
 
-  // 布局配置
+  // Layout configuration
   layout: {
     type: 'sidebar', // sidebar, top, mixed
     sidebar: {
@@ -233,11 +237,11 @@ const config = {
     }
   },
 
-  // 组件配置
+  // Component configuration
   components: {
     'component-name': {
-      label: '组件名称',
-      description: '组件描述',
+      label: 'Component Name',
+      description: 'Component description',
       demos: [...],
       apis: [...]
     }
@@ -245,31 +249,31 @@ const config = {
 };
 ```
 
-### 组件注册
+### Component Registration
 
 ```javascript
-// 注册Demo组件
+// Register Demo components
 window.__DOC_SDK_DEMOS__ = {
   'component-name': {
     'demo-name': DemoComponent
   }
 };
 
-// 注册Demo代码
+// Register Demo code
 window.__DOC_SDK_DEMO_CODES__ = {
   'component-name': {
     'demo-name': 'const Demo = () => <div>Hello</div>;'
   }
 };
 
-// 注册API文档
+// Register API documentation
 window.__DOC_SDK_APIS__ = {
   'component-name': {
     'api-name': [
       {
         param: 'prop',
         type: 'string',
-        desc: '属性描述',
+        desc: 'Property description',
         default: '',
         required: false
       }
@@ -278,9 +282,9 @@ window.__DOC_SDK_APIS__ = {
 };
 ```
 
-## 🔧 高级功能
+## 🔧 Advanced Features
 
-### 自定义主题
+### Custom Theme
 
 ```javascript
 const customTheme = {
@@ -309,19 +313,19 @@ const docSdk = new DocSDK({
 });
 ```
 
-### 插件开发
+### Plugin Development
 
 ```javascript
 const myPlugin = {
   name: 'my-plugin',
   version: '1.0.0',
   install(context) {
-    // 添加钩子
+    // Add hooks
     context.hooks.add('beforeRender', () => {
       console.log('Before render');
     });
 
-    // 监听事件
+    // Listen to events
     context.events.on('routeChange', (route) => {
       console.log('Route changed:', route);
     });
